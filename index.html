@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Live Monitoring Dashboard – Georgia</title>
+  <link rel="stylesheet" href="style.css" />
+  
+
+  <!-- Chart.js без адаптеров -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Firebase (compat) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <script src="https://unpkg.com/feather-icons"></script>
+  <!-- Popper (для позиционирования) -->
+  <script src="https://unpkg.com/@popperjs/core@2"></script>
+  <!-- Tippy.js -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/tippy.js@6/dist/tippy.css"
+  />
+  <script src="https://unpkg.com/tippy.js@6"></script>
+
+</head>
+<body>
+<header class="site-header">
+  <h1 class="site-title">Live Monitoring Dashboard – Georgia</h1>
+  <div class="header-controls">
+    <label class="theme-switch">
+      <input type="checkbox" id="theme-toggle" aria-label="Toggle dark mode">
+      <span class="slider"></span>
+      <span class="icon-sun">☀️</span>
+      <span class="icon-moon">🌙</span>
+    </label>
+    <div class="header-timer" id="header-timer">Auto-refresh in 15s</div>
+  </div>
+</header>
+
+
+  <div id="metrics-container" class="metrics-container"></div>
+
+  <main class="cards-container">
+
+    <!-- Поле поиска сотрудника -->
+<section class="card card-search card-fullwidth">
+  <h2><i data-feather="search"></i> Find Employee</h2>
+  <input list="employees-list" id="employee-search" placeholder="Type to search…" />
+  <datalist id="employees-list"></datalist>
+</section>
+
+
+   <section class="card">
+   <h2><i data-feather="user-check"></i> Active Teammates</h2>
+   <ul id="active-list"></ul>
+   </section>
+     <section class="card">
+     <h2><i data-feather="user-minus"></i> Pre-Away Teammates</h2>
+     <ul id="pre-away-list"></ul>
+   </section>
+     <section class="card">
+     <h2><i data-feather="user-x"></i> Away Teammates</h2>
+     <ul id="away-list"></ul>
+   </section>
+
+ <section class="card card-breaks">
+   <h2><i data-feather="clock"></i> Breaks</h2>
+      <ul class="breaks-header">
+        <li class="employee header">
+          <span>Full name</span><span>Break 1</span><span>Break 2</span>
+        </li>
+      </ul>
+      <ul id="breaks-list"></ul>
+    </section>
+
+    <section class="card"><h2><i data-feather="calendar"></i> Upcoming Shifts</h2><ul id="upcoming-list"></ul></section>
+
+<section class="card card-fullwidth" id="current-card">
+  <div class="card-header">
+    <h2>
+      <!-- вместо 📆 -->
+      <i data-feather="calendar"></i>
+      Today's Shifts
+    </h2>
+    <div class="header-controls">
+      <button class="search-btn" aria-label="Toggle search">
+        <i data-feather="search"></i>
+      </button>
+      <button class="toggle-btn" aria-expanded="true">
+        <!-- вместо символа ▼ -->
+        <i data-feather="chevron-down"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Поле поиска, скрыто по умолчанию -->
+  <div class="search-container">
+    <input
+      type="text"
+      id="current-search"
+      class="current-search-input"
+      placeholder="Type to search…"
+    />
+
+  </div>
+
+  <div class="collapsible-content">
+    <table id="current-table">
+      <thead>
+        <tr>
+          <th>Employee</th><th>Shift Type</th><th>Start</th><th>End</th>
+        </tr>
+      </thead>
+      <tbody id="current-list"></tbody>
+    </table>
+  </div>
+</section>
+
+
+
+    <section class="card card-fullwidth chart-card">
+    <h2>
+      <i data-feather="bar-chart-2"></i>
+      Distribution by Hour
+      <!-- оборачиваем иконку в span -->
+      <span class="info-icon" data-tippy-content="Employee count by each hour">
+        <i data-feather="info"></i>
+      </span>
+    </h2>
+
+     <canvas id="hour-distribution-chart"></canvas>
+    </section>
+
+
+    <section class="card card-fullwidth chart-card">
+      <h2>
+        <i data-feather="bar-chart-2"></i>
+        Active vs. Should every hour
+
+        <!-- точно так же, как у Distribution by Hour -->
+        <span
+          class="info-icon"
+          data-tippy-content="Count of Active employees on shift vs scheduled number of employees. Updates every hour."
+          style="margin-left:0.1rem; cursor: help;"
+        >
+          <i data-feather="info"></i>
+        </span>
+      </h2>
+
+      <canvas id="active-trend-chart"></canvas>
+      <div class="range-control">
+        <label>
+          Display last
+          <input type="range" id="history-range" min="10" max="100" step="5" value="30">
+          points
+        </label>
+      </div>
+    </section>
+
+
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
