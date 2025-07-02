@@ -1,0 +1,775 @@
+/* style.css */
+/* ========== Reset ========== */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: #f4f4f4; color: #333; line-height: 1.4; }
+
+/* ========== Header ========== */
+.site-header { display: flex; justify-content: space-between; align-items: center;
+               background: #fff; padding: 10px 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+               position: sticky; top: 0; z-index: 100; }
+.site-title { font-size: 1rem; font-weight: 600; }
+.header-timer { font-family: monospace; font-size: 0.9rem; color: #555; }
+
+/* ========== Metrics Cards ========== */
+.metrics-container { display: flex; gap: 12px; padding: 8px 24px; margin: 4px 0; }
+.metric-card { background: #fff; border-radius: 6px; box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+               width: 360px; height: 80px; display: flex; flex-direction: column;
+               justify-content: center; align-items: center; text-align: center;
+               padding: 8px; perspective: 600px; }
+.metric-card.flip-card .flip-inner { position: relative; width: 100%; height: 100%;
+                                     transition: transform 0.6s; transform-style: preserve-3d; }
+.metric-card.flip-card:hover .flip-inner { transform: rotateY(180deg); }
+.flip-front, .flip-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden;
+                          border-radius: 6px; display: flex; flex-direction: column;
+                          justify-content: center; align-items: center; }
+.flip-back { transform: rotateY(180deg); padding: 8px; overflow-y: auto; }
+.metric-title { font-size: 0.75rem; color: #666; margin-bottom: 6px; width: 100%; }
+.metric-value { font-size: 1.25rem; font-weight: bold; width: 100%; line-height: 1; }
+.metric-list { font-size: 0.85rem; text-align: center; width: 100%; }
+.metric-card.alert {
+  background: linear-gradient(135deg, rgba(248, 165, 165, 0.5), rgba(244, 67, 54, 0.5));
+  color: #690000;
+}
+.metric-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  height: 110px; /* стало выше */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 12px; /* больше внутреннего отступа */
+  perspective: 600px;
+}
+
+.metric-title {
+  font-size: 1rem;        /* раньше было 0.75rem */
+  font-weight: 500;
+  color: #444;
+  margin-bottom: 6px;
+}
+
+.metric-value {
+  font-size: 1.5rem;      /* раньше было 1.25rem */
+  font-weight: bold;
+  color: #000;
+}
+
+/* ========== Main Cards Layout ========== */
+.cards-container { display: grid; grid-template-columns: repeat(5, minmax(220px, 1fr));
+                   gap: 16px; padding: 0 24px 24px; margin-top: 4px; }
+.card { background: #fff; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+        padding: 12px; display: flex; flex-direction: column; }
+.card h2 { font-size: 1rem; margin-bottom: 8px; font-weight: bold; color: #222; }
+.card-fullwidth { grid-column: 1 / -1; overflow-x: auto; }
+
+/* ========== Current Shifts Table ========== */
+#current-table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 0.9rem; }
+#current-table th, #current-table td { padding: 6px 8px; border-bottom: 1px solid #e0e0e0; text-align: left; }
+#current-table th { background: #fafafa; font-weight: 500; }
+
+/* ========== Charts ========== */
+.chart-card canvas { width: 100% !important; height: 250px !important; }
+
+/* ========== Range Control ========== */
+.range-control { text-align: right; font-size: 0.9rem; margin-top: 4px; }
+.range-control input[type=range] { vertical-align: middle; width: 200px; }
+
+/* ========== Employee Rows ========== */
+ul { list-style: none; }
+.employee { display: flex; align-items: center; padding: 6px 8px; margin-bottom: 4px;
+            background: #f9f9f9; border-radius: 4px; transition: background 0.2s; }
+.employee:hover { background: #eef2f5; }
+.employee.overdue { background: #ffecec; border: 1px solid #f44336; }
+.employee-name { flex: 1; font-size: 0.9rem; }
+.employee-badge { margin: 0 8px; padding: 2px 6px; font-size: 0.75rem; font-weight: 500;
+                   border-radius: 12px; }
+.employee-badge.active  { background: #e0f2e9; color: #2c7a4b; }
+.employee-badge.break   { background: #cadafc; color: #555; }
+.employee-badge.brb     { background: #fccafb; color: #555; }
+.employee-badge.meeting { background: #fff3cd; color: #856404; }
+.employee-badge.shiftend { background: #fff3cd; color: #856404; }
+.timer { font-family: monospace; color: #555; flex-shrink: 0; margin-left: 8px; }
+
+/* ========== Breaks Section ========== */
+.breaks-header { list-style: none; padding: 0; margin: 0 0 8px; }
+.breaks-header .employee.header { display: grid; grid-template-columns: 1fr 1fr 1fr;
+                                   gap: 8px; padding: 6px 8px; font-size: 0.85rem; font-weight: 500; }
+.breaks-header span:nth-child(1) { text-align: left; }
+.breaks-header span:nth-child(2) { text-align: center; }
+.breaks-header span:nth-child(3) { text-align: right; }
+#breaks-list { list-style: none; padding: 0; margin: 0; }
+#breaks-list .employee { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;
+                          padding: 6px 8px; background: #f9f9f9; margin-bottom: 4px; }
+#breaks-list span:nth-child(1) { text-align: left; }
+#breaks-list span:nth-child(2) { text-align: center; }
+#breaks-list span:nth-child(3) { text-align: right; }
+
+/* ========== Responsive ========== */
+@media (max-width: 600px) {
+  .site-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .metrics-container { flex-wrap: wrap; gap: 8px; padding: 8px 16px; margin: 8px 0; }
+  .cards-container { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+  .card { padding: 8px; }
+  .employee { padding: 4px 6px; }
+}
+/* Стили для кнопки и скрытого состояния */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.toggle-btn {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  transform: rotate(0deg);
+  transition: transform 0.2s;
+}
+#current-card.collapsed .toggle-btn {
+  transform: rotate(-90deg);
+}
+/* Убираем жёсткий лимит высоты */
+#current-card .collapsible-content {
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  max-height: none;        /* <— Раньше было 2000px */
+}
+
+/* При добавленном .collapsed — скрываем */
+#current-card.collapsed .collapsible-content {
+  max-height: 0;
+}
+.card-search {
+  grid-column: 1 / -1;
+  padding: 16px;
+  border-radius: 10px;
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.card-search h2 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+
+.card-search input {
+  width: 100%;
+  padding: 10px 14px;
+  font-size: 0.95rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  transition: all 0.2s ease-in-out;
+  outline: none;
+}
+
+.card-search input:focus {
+  background-color: #fff;
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+}
+
+.employee.highlight {
+  background:#fff3cd !important;
+  border-color:#ffeeba !important;
+}
+/* Pulsing red outline for matched employees */
+.employee.search-match {
+  border: 2px solid #f44336;
+  animation: pulse 1s infinite;
+}
+
+/* Keyframes for the pulsing shadow */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 rgba(244, 67, 54, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 10px rgba(244, 67, 54, 0.7);
+  }
+  100% {
+    box-shadow: 0 0 0 rgba(244, 67, 54, 0.3);
+  }
+}
+.card-search {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  grid-column: 1 / -1; /* чтобы заняла всю ширину как fullwidth */
+  margin-bottom: 16px;
+}
+
+.card-search input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Для подсветки и анимации */
+.employee.search-match {
+  border: 2px solid #f44336;
+  animation: pulse 1s infinite;
+}
+@keyframes pulse {
+  0%   { box-shadow: 0 0 0 rgba(244, 67, 54, 0.3); }
+  50%  { box-shadow: 0 0 10px rgba(244, 67, 54, 0.7); }
+  100% { box-shadow: 0 0 0 rgba(244, 67, 54, 0.3); }
+}
+.metric-card.active {
+  background: linear-gradient(135deg, rgba(212, 237, 145, 0.5), rgba(168, 224, 99, 0.5));
+  color: #1b4200;
+}
+
+.metric-card.shouldbe {
+  background: linear-gradient(135deg, rgba(145, 212, 237, 0.5), rgba(99, 168, 224, 0.5));
+  color: #1b4200;
+}
+
+.metric-card.preaway {
+  background: linear-gradient(135deg, rgba(255, 221, 149, 0.5), rgba(244, 162, 97, 0.5));
+  color: #5c3700;
+}
+
+.metric-card.away {
+  background: linear-gradient(135deg, rgba(248, 165, 165, 0.5), rgba(244, 67, 54, 0.5));
+  color: #690000;
+}
+
+.metric-card.notcomingtoday {
+  background: linear-gradient(135deg, rgba(227, 227, 227, 0.5), rgba(204, 204, 204, 0.5));
+  color: #690000;
+}
+
+.metric-card .metric-title,
+.metric-card .metric-value {
+  color: inherit;
+}
+/* === Dark theme variables & base === */
+body.dark-theme {
+  --bg-base: #1e1e1e;
+  --bg-card: #2a2a2a;
+  --bg-list-item: #424242;
+  --bg-input: #3a3a3a;
+  --border-input: #555;
+  --text-primary: #eee;
+  --text-secondary: #ccc;
+  background: var(--bg-base);
+  color: var(--text-primary);
+}
+
+/* === Header === */
+body.dark-theme .site-header {
+  background: var(--bg-card);
+  box-shadow: none;
+}
+body.dark-theme .site-title,
+body.dark-theme .header-timer {
+  color: var(--text-primary);
+}
+
+/* === Cards & metric-cards === */
+body.dark-theme .card,
+body.dark-theme .metric-card {
+  background: var(--bg-card) !important;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.5);
+}
+body.dark-theme .card h2,
+body.dark-theme .metric-title,
+body.dark-theme .metric-value {
+  color: var(--text-primary) !important;
+}
+
+/* сохраняем градиенты для metric-card */
+body.dark-theme .metric-card {
+  background: none !important;
+}
+body.dark-theme .metric-card.active {
+  background: linear-gradient(135deg, rgba(212,237,145,0.5), rgba(168,224,99,0.5)) !important;
+  color: #1b4200 !important;
+}
+body.dark-theme .metric-card.shouldbe {
+  background: linear-gradient(135deg, rgba(145,212,237,0.5), rgba(99,168,224,0.5)) !important;
+  color: #1b4200 !important;
+}
+body.dark-theme .metric-card.preaway {
+  background: linear-gradient(135deg, rgba(255,221,149,0.5), rgba(244,162,97,0.5)) !important;
+  color: #5c3700 !important;
+}
+body.dark-theme .metric-card.away {
+  background: linear-gradient(135deg, rgba(248,165,165,0.5), rgba(244,67,54,0.5)) !important;
+  color: #690000 !important;
+}
+body.dark-theme .metric-card.notcomingtoday {
+  background: linear-gradient(135deg, rgba(227,227,227,0.5), rgba(204,204,204,0.5)) !important;
+  color: #690000 !important;
+}
+body.dark-theme .metric-card.alert {
+  background: linear-gradient(135deg, rgba(248,165,165,0.5), rgba(244,67,54,0.5)) !important;
+  color: #690000 !important;
+}
+
+/* === Employee lists === */
+body.dark-theme .employee,
+body.dark-theme #breaks-list .employee,
+body.dark-theme #upcoming-list .employee {
+  background: var(--bg-list-item) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--bg-card);
+}/* ====== Toggle switch ====== */
+.theme-switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 30px;
+  margin-left: 12px;
+  vertical-align: middle;
+}
+.theme-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.theme-switch .slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: #ccc;
+  border-radius: 30px;
+  transition: background 0.3s;
+}
+.theme-switch .slider:before {
+  content: "";
+  position: absolute;
+  height: 26px; width: 26px;
+  left: 2px; bottom: 2px;
+  background: white;
+  border-radius: 50%;
+  transition: transform 0.3s;
+}
+.theme-switch input:checked + .slider {
+  background: #66bb6a;
+}
+.theme-switch input:checked + .slider:before {
+  transform: translateX(30px);
+}
+
+/* sun & moon icons */
+.theme-switch .icon-sun,
+.theme-switch .icon-moon {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  pointer-events: none;
+}
+.theme-switch .icon-sun {
+  left: 8px;
+  color: #f1c40f;
+  transition: opacity 0.3s;
+}
+.theme-switch .icon-moon {
+  right: 8px;
+  color: #f39c12;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.theme-switch input:checked ~ .icon-sun {
+  opacity: 0;
+}
+.theme-switch input:checked ~ .icon-moon {
+  opacity: 1;
+}
+
+body.dark-theme .employee-name,
+body.dark-theme .timer {
+  color: var(--text-primary) !important;
+}
+body.dark-theme .employee-badge {
+  background: rgba(60,60,60,0.6) !important;
+  color: var(--text-secondary) !important;
+}
+
+/* === Breaks header titles === */
+body.dark-theme .breaks-header .employee.header span {
+  color: var(--text-primary) !important;
+}
+
+/* === Current Shifts table === */
+body.dark-theme #current-table th {
+  background: var(--bg-card) !important;
+  color: var(--text-primary) !important;
+}
+body.dark-theme #current-table td {
+  background: var(--bg-input) !important;
+  color: var(--text-secondary) !important;
+  border-color: var(--bg-card);
+}
+
+/* === Inputs & selects === */
+body.dark-theme input,
+body.dark-theme select,
+body.dark-theme input[list] {
+  background: var(--bg-input) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-input) !important;
+}
+
+/* === Collapse button === */
+body.dark-theme .toggle-btn {
+  color: var(--text-primary) !important;
+}
+/* ====== Toggle switch ====== */
+.theme-switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 30px;
+  margin-left: 12px;
+  vertical-align: middle;
+}
+.theme-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.theme-switch .slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: #ccc;
+  border-radius: 30px;
+  transition: background 0.3s;
+}
+.theme-switch .slider:before {
+  content: "";
+  position: absolute;
+  height: 26px; width: 26px;
+  left: 2px; bottom: 2px;
+  background: white;
+  border-radius: 50%;
+  transition: transform 0.3s;
+}
+.theme-switch input:checked + .slider {
+  background: #66bb6a;
+}
+.theme-switch input:checked + .slider:before {
+  transform: translateX(30px);
+}
+
+/* sun & moon icons */
+.theme-switch .icon-sun,
+.theme-switch .icon-moon {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  pointer-events: none;
+}
+.theme-switch .icon-sun {
+  left: 8px;
+  color: #f1c40f;
+  transition: opacity 0.3s;
+}
+.theme-switch .icon-moon {
+  right: 8px;
+  color: #f39c12;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.theme-switch input:checked ~ .icon-sun {
+  opacity: 0;
+}
+.theme-switch input:checked ~ .icon-moon {
+  opacity: 1;
+}
+/* ==== Header ==== */
+.site-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;       /* всё по центру по вертикали */
+  background: #fff;
+  padding: 10px 20px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+/* контейнер для свитча + таймера */
+.header-controls {
+  display: flex;
+  align-items: center;       /* центрируем свитч и текст */
+}
+
+/* ==== Toggle switch ==== */
+.theme-switch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;       /* иконки и ползунок по центру */
+  width: 40px;
+  height: 20px;
+  margin-right: 12px;         /* отступ до таймера */
+}
+
+/* скрываем нативный чекбокс */
+.theme-switch input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* дорожка (track) */
+.theme-switch .slider {
+  position: absolute;
+  inset: 0;                   /* top:0; right:0; bottom:0; left:0 */
+  background: #ccc;
+  border-radius: 10px;
+  transition: background 0.3s;
+}
+
+/* ползунок (thumb) */
+.theme-switch .slider:before {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  left: 2px;
+  top: 2px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.3s;
+}
+
+/* checked state */
+.theme-switch input:checked + .slider {
+  background: #5e7ab8;
+}
+.theme-switch input:checked + .slider:before {
+  transform: translateX(20px);
+}
+
+/* иконки */
+.theme-switch .icon-sun,
+.theme-switch .icon-moon {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 12px;
+  pointer-events: none;
+}
+.theme-switch .icon-sun { left: 2px; color: #f1c40f; }
+.theme-switch .icon-moon {
+  right: 2px;
+  color: #f39c12;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.theme-switch input:checked ~ .icon-sun  { opacity: 0; }
+.theme-switch input:checked ~ .icon-moon { opacity: 1; }
+
+/* ==== Timer ==== */
+.header-timer {
+  font-family: monospace;
+  font-size: 0.9rem;
+  color: #555;
+}
+/* === Dark theme badges === */
+body.dark-theme .employee-badge.active {
+  background: rgba(32, 160, 63, 0.6) !important;  /* слегка потемнённый зелёный */
+  color: #e0f2e9 !important;
+}
+
+body.dark-theme .employee-badge.break {
+  background: rgba(202, 226, 252, 0.6) !important; /* слегка потемнённый серый */
+  color: #f0f0f0 !important;
+}
+
+body.dark-theme .employee-badge.brb {
+  background: rgba(252, 202, 251, 0.6) !important; /* тот же оттенок, что и для break */
+  color: #f0f0f0 !important;
+}
+
+body.dark-theme .employee-badge.meeting {
+  background: rgba(218, 165, 32, 0.6) !important;  /* слегка потемнённый жёлтый */
+  color: #fff3cd !important;
+}
+
+body.dark-theme .employee-badge.shiftend {
+  background: rgba(218, 165, 32, 0.6) !important;  /* совпадает с meeting */
+  color: #fff3cd !important;
+}
+/* Чтобы ссылка выглядела как обычный текст, но подчёркивалась при hover */
+.employee-name {
+  color: inherit;
+  text-decoration: none;
+}
+.employee-name:hover {
+  text-decoration: underline;
+}
+/* ====== Выровнять бейдж + таймер по правому краю ====== */
+.employee-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;          /* расстояние между бейджем и таймером */
+  margin-left: auto; /* прижать весь блок meta к правому краю li */
+}
+
+/* Убираем старые отступы, если они были */
+.employee-badge,
+.timer {
+  margin: 0 !important;
+}
+/* ==== Скрытая секция поиска ==== */
+#current-card .search-container {
+  display: none;
+  padding: 8px 12px;
+  background: #fff;               /* светлая тема */
+  border-bottom: 1px solid #e0e0e0;
+}
+
+/* ==== Показ при active ==== */
+#current-card .search-container.visible {
+  display: block;
+}
+
+/* ==== Кнопки в заголовке ==== */
+#current-card .card-header .header-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+#current-card .search-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 2px;
+}
+
+/* ==== Поле ввода поиска — общие стили ==== */
+#current-card .search-container input {
+  width: 100%;
+  padding: 6px 10px;
+  font-size: 0.9rem;
+  border-radius: 4px;
+  box-shadow: none;              /* убираем теневые эффекты */
+  outline:    none;              /* убираем outline */
+}
+
+/* ==== Стили для светлой темы ==== */
+body:not(.dark-theme) #current-card .search-container input {
+  background-color: #fff;
+  color:            #333;
+  border:           1px solid #ccc;
+}
+
+/* ==== Стили для тёмной темы ==== */
+body.dark-theme #current-card .search-container {
+  background: var(--bg-card);    /* фон карточки */
+  border-color: var(--bg-input);
+}
+body.dark-theme #current-card .search-container input {
+  background-color: var(--bg-input);
+  color:            var(--text-primary);
+  border:           1px solid var(--border-input);
+}
+body.dark-theme #current-card .search-container input:focus {
+  border:     1px solid var(--border-input);
+  box-shadow: none;
+  outline:    none;
+}
+.card h2 {
+
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+}
+
+.card h2 svg {
+  width: 1em;
+  height: 1em;
+}
+.search-btn {
+  background: none;
+  border: none;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.search-btn i {
+  width: 1em;
+  height: 1em;
+}
+/* Отступы внутри самой карточки */
+.card-search {
+  padding: 16px; /* можно увеличить, если хотите больше пространства */
+}
+
+/* Заголовок с иконкой */
+.card-search h2 {
+  display: flex;
+  align-items: center;   /* по вертикали выравниваем текст и иконку */
+  gap: 0.5rem;           /* расстояние между иконкой и текстом */
+  margin: 0;             /* сбрасываем лишние внешние отступы */
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Размер и позиция SVG из Feather */
+.card-search h2 i {
+  width: 1em;
+  height: 1em;
+  stroke-width: 2;       /* толщина линий иконки */
+  flex-shrink: 0;        /* чтобы иконка не сжималась */
+}
+/* чтобы иконка не «сползала» и не съезжала вниз */
+.info-icon {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 0.rem;        /* ваш отступ между текстом и иконкой */
+  cursor: help;               /* курсор «?» при наведении */
+}
+.info-icon svg {
+  width: 1em;
+  height: 1em;
+  flex-shrink: 0;
+}
+/* ——————————————————————————————————————————————
+   ️  Список без фона, отступов и скруглений
+————————————————————————————————————————————— */
+/* разделители между строками списка */
+.card ul li.employee {
+  /* убираем фон, если ещё не убрано */
+  background: transparent !important;
+  /* добавляем тонкую линию снизу */
+  border-bottom: 1px solid #e0e0e0;
+  /* чуть отодвинем содержимое от линии */
+  padding: 4px 0;
+}
+
+/* у последнего элемента разделитель не нужен */
+.card ul li.employee:last-child {
+  border-bottom: none;
+}
+body.dark-theme .card ul li.employee {
+  /* чуть прозрачный белый, вместо ярко-белого */
+  border-bottom-color: rgba(255, 255, 255, 0.2);
+}
+
